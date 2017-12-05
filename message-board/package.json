@@ -1,0 +1,11 @@
+{
+  "name": "message-board",
+  "version": "1.0.0",
+  "description": "ThinkPHP5.1 comments board",
+  "main": "index.js",
+  "author": "Kevin181",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "^3.3.7"
+  }
+}

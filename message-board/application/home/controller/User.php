@@ -3,6 +3,7 @@ namespace app\home\controller;
 
 use think\Controller;
 use think\Db;
+use think\facade\Session;
 
 class User extends Controller
 {
@@ -94,7 +95,7 @@ class User extends Controller
         {
             $this->error('请登录');
         }
-        session_destroy();
+        Session::flush();
         $this->success('退出登录成功', url('login'));
     }
 }

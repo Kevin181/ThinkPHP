@@ -1,14 +1,7 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>留言列表</title>
-</head>
-
-<body>
+{extend name="../template/public/base.html" /}
+{block name="title"}留言列表{/block}
+{block name="main"}
     <h1>留言板</h1>
-
     <div>
         <empty name="Think.session.user.username">
             <a href="{:url('home/user/login')}">登录</a>
@@ -20,21 +13,19 @@
             <a href="{:url('home/user/logout')}">退出登录</a>
         </empty>
     </div>
-    <volist name="list" id="item">
+
+    {volist name="list" id="item"}
         <div>
             {$item.content}
-            <br/> 
+            <br/>
             <div>留言者：{$item.user_name} </div>
             <br>
             留言时间：{$item.created_at|date='Y-m-d H:i:s'}
-            <eq name={$Think.session.user.userId} value={$item.user_id}>
+            {eq name="$Think.session.user.userId" value="$item.user_id" }
                 <a href={:url('delete?id='.$item['message_id'])} onclick="return confirm('确定删除此条留言？')">删除</a>
-            </eq>
+            {/eq}
         </div>
-    </volist>
+    {/volist}
     <p>
     {$list->render()|raw}
-    </p>
-</body>
-
-</html>
+{/block}

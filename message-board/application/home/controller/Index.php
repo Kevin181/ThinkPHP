@@ -33,7 +33,7 @@ class Index extends Controller
         ->join('users', 'users.user_id = m.user_id')
         ->order('message_id desc')
         ->paginate(10);
-        $this->assign('list', $list);var_dump($list);
+        $this->assign('list', $list);
         return $this->fetch();
     }
 
