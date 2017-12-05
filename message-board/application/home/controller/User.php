@@ -2,16 +2,16 @@
 namespace app\home\controller;
 
 use think\Controller;
-use think\Model;
+use think\Db;
 
-class UserController extends Controller
+class User extends Controller
 {
     /**
      * 注册表单
      */
     public function register()
     {
-        $this->display();
+        return $this->fetch();
     }
 
     /**
@@ -19,38 +19,41 @@ class UserController extends Controller
      */
     public function do_register()
     {
-        $username = I('username');
-        $password = I('password');
-        $repassword = I('repassword');
+        $username = input('username');
+        $password = input('password');
+        $repassword = input('repassword');
         if (empty($username))
         {
             $this->error('用户名不能为空');
         }
+
         if (empty($password))
         {
             $this->error('密码不能为空');
         }
+
         if ($password != $repassword)
         {
             $this->error('确认密码错误');
         }
+
         //检测用户是否已注册
-        $model = new Model('User');
-        $user = $model->where(array('username' => $username))->find();
+        $user = Db::table('users')->where('user_name', $username)->select();
         if (!empty($user))
         {
             $this->error('用户名已存在');
         }
+
         $data = array(
-            'username' => $username,
+            'user_name' => $username,
             'password' => md5($password),
             'created_at' => time()
         );
-        if (!($model->create($data) && $model->add()))
+        if (!(Db::table('users')->insert($data, true) && Db::table('users')->getLastInsID()))
         {
             $this->error('注册失败！' . $model->getDbError());
         }
-        $this->success('注册成功，请登录', U('login'));
+        $this->success('注册成功，请登录', url('login'));
     }
 
     /**
@@ -58,7 +61,7 @@ class UserController extends Controller
      */
     public function login()
     {
-        $this->display();
+        return $this->fetch();
     }
 
     /**
@@ -66,19 +69,20 @@ class UserController extends Controller
      */
     public function do_login()
     {
-        $username = I('username');
-        $password = I('password');
-        $model = new Model('User');
-        $user = $model->where(array('username' => $username))->find();
+        $username = input('username');
+        $password = input('password');
+        $user = Db::table('users')->where(array('user_name' => $username))->find();
+        var_dump($user);
         if (empty($user) || $user['password'] != md5($password))
         {
             $this->error('账号或密码错误');
         }
+
         //写入session
         session('user.userId', $user['user_id']);
-        session('user.username', $user['username']);
+        session('user.username', $user['user_name']);
         //跳转首页
-        $this->redirect('Index/index');
+        $this->redirect('home/index/index');
     }
 
     /**
@@ -91,6 +95,6 @@ class UserController extends Controller
             $this->error('请登录');
         }
         session_destroy();
-        $this->success('退出登录成功', U('Index/index'));
+        $this->success('退出登录成功', url('login'));
     }
 }

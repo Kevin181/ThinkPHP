@@ -4,7 +4,7 @@ namespace app\home\controller;
 use app\home\model\Message;
 use think\Controller;
 use think\App;
-use think\Paginator;
+use think\Db;
 
 class Index extends Controller
 {
@@ -15,7 +15,7 @@ class Index extends Controller
     {
         if (!session('user.userId'))
         {
-            $this->error('请登录', url('User/login'));
+            $this->error('请登录', url('user/login'));
         }
     }
 
@@ -24,14 +24,17 @@ class Index extends Controller
      */
     public function index()
     {
-        $model = new Message();
-        $count = $model->count();
-        $page = new Paginator($count, 10);
-        $show = $page->show();
-        $list = $model->order('message_id desc')->limit($page->firstRow . ',' . $page->listRows)->select();
-        $this->assign('page', $show);
-        $this->assign('list', $list);
-        $this->display();
+        // $model = new Message();
+        // $count = $model->count();
+        // $page = new Paginator($count, 10);
+        // $show = $page->show();
+        $list = Db::table('messages')
+        ->alias('m')
+        ->join('users', 'users.user_id = m.user_id')
+        ->order('message_id desc')
+        ->paginate(10);
+        $this->assign('list', $list);var_dump($list);
+        return $this->fetch();
     }
 
     /**
@@ -40,7 +43,7 @@ class Index extends Controller
     public function post()
     {
         $this->checkLogin();
-        $this->display();
+        return $this->fetch();
     }
 
     /**
@@ -60,14 +63,13 @@ class Index extends Controller
             $this->error('留言内容最多100字');
         }
 
-        $model = App::model('Message');
         $userId = session('user.userId');
         $data = array(
             'content' => $content,
             'created_at' => time(),
             'user_id' => $userId
         );
-        if (!($model->create($data) && $model->add()))
+        if (!(Db::table('messages')->insert($data, true) && Db::table('messages')->getLastInsID()))
         {
             $this->error('留言失败');
         }
