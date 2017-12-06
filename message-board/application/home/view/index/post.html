@@ -3,22 +3,35 @@
 
 <head>
     <meta charset="UTF-8">
+    {load href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" /}
     <title>发表留言</title>
 </head>
 
 <body>
-    <h1>发表留言</h1>
-    <form action="__URL__/do_post" method="post">
-        <label for="content">留言内容</label>
-        <br>
-        <textarea name="content" id="content" rows="4" maxlength="100" required></textarea>
-        <br>
-        <button>发表</button>
-        <button type="reset">重置</button>
-    </form>
-    <p>
-        <a href="__URL__/index">首页</a>
-    </p>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <h2>发表留言</h2>
+                <form action="__URL__/do_post" method="post">
+                    <label for="content">留言内容</label>
+                    <textarea name="content" class="form-control" id="content" rows="4" maxlength="100" required></textarea>
+                    <p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <button class="btn btn-md btn-success btn-block" type="submit">发表</button>
+                            </div>
+                            <div class="col-md-6">
+                                <button class="btn btn-md btn-warning btn-block" type="reset">重置</button>
+                            </div>
+                        </div>
+                    </p>
+                </form>
+                <p>
+                    <a class="btn btn-md btn-primary pull-right" href="__URL__/index">首页</a>
+                </p>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>

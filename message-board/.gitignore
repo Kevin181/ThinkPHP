@@ -3,4 +3,5 @@ composer.lock
 *.log
 node_modules
 thinkphp
+config/database.php
 yarn.lock
