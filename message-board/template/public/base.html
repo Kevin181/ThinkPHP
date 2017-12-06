@@ -1,16 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    {load href="/public/../node_modules/bootstrap/dist/css/bootstrap.css" /}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+ {load href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" /}
     <title>{block name="title"}标题{/block}</title>
 </head>
 <body>
-{block name="menu"}菜单{/block}
-{block name="left"}左边分栏{/block}
-{block name="main"}主内容{/block}
-{block name="right"}右边分栏{/block}
-{block name="footer"}底部{/block}
-{load href="./node_modules/bootstrap/dist/js/bootstrap.js" /}
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            {block name="navbar"}Navbar{/block}
+        </div>
+    </nav>
+    <div class="container">
+        {block name="main"}主内容{/block}
+    </div>
+    <footer class="blog-footer">
+        {block name="footer"}底部{/block}
+    </footer>
+{load href="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js" /}
 </body>
 </html>

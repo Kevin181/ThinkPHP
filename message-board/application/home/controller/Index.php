@@ -69,7 +69,7 @@ class Index extends Controller
             'created_at' => time(),
             'user_id' => $userId
         );
-        if (!(Db::table('messages')->insert($data, true) && Db::table('messages')->getLastInsID()))
+        if (!(Db::table('messages')->insert($data) && Db::table('messages')->getLastInsID()))
         {
             $this->error('留言失败');
         }
@@ -87,8 +87,7 @@ class Index extends Controller
             $this->error('缺少参数');
         }
         $this->checkLogin();
-        $model = App::model('Message');
-        $result = $model->where(array('message_id' => $id, 'user_id' => session('user.userId')))->find();
+        $result = Db::table('messages')->where(array('message_id' => $id, 'user_id' => session('user.userId')))->find();
         if (!$result)
         {
             $this->error('删除失败');

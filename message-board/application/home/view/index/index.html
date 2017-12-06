@@ -1,31 +1,53 @@
 {extend name="../template/public/base.html" /}
 {block name="title"}留言列表{/block}
-{block name="main"}
-    <h1>留言板</h1>
-    <div>
-        <empty name="Think.session.user.username">
-            <a href="{:url('home/user/login')}">登录</a>
-            <a href="{:url('home/user/register')}">注册</a>
-            <else/> 欢迎您！ {$Think.session.user.username}
-            <a href="__URL__/post">
-                <strong>发表留言</strong>
-            </a>
-            <a href="{:url('home/user/logout')}">退出登录</a>
-        </empty>
+{block name="navbar"}
+    <div class="navbar-header">
+         欢迎您！ {$Think.session.user.username}
     </div>
-
-    {volist name="list" id="item"}
-        <div>
-            {$item.content}
-            <br/>
-            <div>留言者：{$item.user_name} </div>
-            <br>
-            留言时间：{$item.created_at|date='Y-m-d H:i:s'}
-            {eq name="$Think.session.user.userId" value="$item.user_id" }
-                <a href={:url('delete?id='.$item['message_id'])} onclick="return confirm('确定删除此条留言？')">删除</a>
-            {/eq}
+    <ul class="nav navbar-nav navbar-right">
+        {empty name="Think.session.user.username"}
+            <li><a href="{:url('home/user/login')}">登录</a></li>
+            <li><a href="{:url('home/user/register')}">注册</a></li>
+            {else/}
+            <li>
+                <a href="__URL__/post">
+                    <strong>发表留言</strong>
+                </a>
+            </li>
+            <li><a href="{:url('home/user/logout')}">退出登录</a></li>
+        {/empty}
+    </ul>
+{/block}
+{block name="main"}
+    <div class="row">
+        <div class="text-center">
+            <h2>留言板</h2>
+            <p>Gently you come, please do not go gently, knocking a keyboarding , leave your footprints.</p>
         </div>
-    {/volist}
-    <p>
+    </div>
+    <div class="row">
+        {volist name="list" id="item"}
+            <div class="col-md-6">
+                <div class="blog">
+                    {php} $i=rand(1, 4); echo "<img src='http://demo.graygrids.com/themes/elevator/slider/images/blog-0$i.jpg' alt='img-responsive' class='img-responsive'>";{/php}
+                    <!-- <img src="http://demo.graygrids.com/themes/elevator/slider/images/blog-0{rand(1,4)}.jpg" alt="img-responsive" class="img-responsive"> -->
+                    <div class="blog-detail">
+                        <ul>
+                            <li>留言者：{$item.user_name}</li>
+                            <li>
+                                留言时间：{$item.created_at|date='Y-m-d H:i:s'}
+                            </li>
+                            <li>
+                                {eq name="$Think.session.user.userId" value="$item.user_id" }
+                                    <a href={:url( 'delete?id='.$item[ 'message_id'])} onclick="return confirm('确定删除此条留言？')">删除</a>
+                                {/eq}
+                            </li>
+                        </ul>
+                    </div>
+                    <p>{$item.content}</p>
+                </div>
+            </div>
+        {/volist}
+    </div>
     {$list->render()|raw}
 {/block}
