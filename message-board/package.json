@@ -6,6 +6,10 @@
   "author": "Kevin181",
   "license": "MIT",
   "dependencies": {
+    "babel": "^6.23.0",
     "bootstrap": "^3.3.7"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1"
   }
 }
